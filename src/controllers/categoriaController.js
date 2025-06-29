@@ -1,4 +1,4 @@
-import { getCategoriaModel } from "../models/categoriaModel.js";
+import { getCategoriaModel } from "../models/categoriaModels.js";
 
 export const getCategoriaController = async (req, res) => {
   const data = await getCategoriaModel();

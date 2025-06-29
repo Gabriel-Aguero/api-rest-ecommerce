@@ -4,7 +4,7 @@ import {
   createProductModel,
   updateProductModel,
   deleteProductModel,
-  searchProductByCategoriaModel,
+  getProductsByCategoriaModel,
 } from "../models/productsModels.js";
 
 export const getProductsController = async (req, res) => {
@@ -73,7 +73,7 @@ export const deleteProductController = async (req, res) => {
 export const searchProductByCategoriaController = async (req, res) => {
   try {
     const { categoria } = req.query;
-    const data = await searchProductByCategoriaModel(categoria);
+    const data = await getProductsByCategoriaModel(categoria);
     res.json(data);
   } catch (error) {
     next(error);

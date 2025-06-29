@@ -42,3 +42,12 @@ export const deleteProductModel = async (id) => {
   await deleteDoc(productDoc);
   return { id };
 };
+
+export const getProductsByCategoriaModel = async (categoria) => {
+  const q = query(
+    collection(db, "products"),
+    where("category", "==", categoria)
+  );
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};

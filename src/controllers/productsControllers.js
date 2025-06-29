@@ -4,6 +4,7 @@ import {
   createProductModel,
   updateProductModel,
   deleteProductModel,
+  searchProductsModel,
   getProductsByCategoriaModel,
 } from "../models/productsModels.js";
 
@@ -65,6 +66,28 @@ export const deleteProductController = async (req, res) => {
 
     await deleteProductModel(id);
     res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const searchProductsController = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    if (!q) {
+      return res
+        .status(400)
+        .json({ message: "Falta el parámetro de búsqueda (?q=)" });
+    }
+
+    const data = await searchProductsModel(q);
+
+    if (data.length === 0) {
+      return res.status(404).json({ message: "No se encontraron productos" });
+    }
+
+    res.json(data);
   } catch (error) {
     next(error);
   }

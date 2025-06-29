@@ -51,3 +51,12 @@ export const getProductsByCategoriaModel = async (categoria) => {
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
+
+export const searchProductsModel = async (query) => {
+  const productsCollection = collection(db, "products");
+  const snapshot = await getDocs(productsCollection);
+  const products = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  return products.filter((product) =>
+    product.title.toLowerCase().includes(query.toLowerCase())
+  );
+};

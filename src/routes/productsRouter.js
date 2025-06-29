@@ -11,12 +11,12 @@ import {
 
 const router = Router();
 
+router.get("/search", searchProductsController);
+router.get("/categoria/:categoria", searchProductByCategoriaController);
 router.get("/", getProductsController);
 router.get("/:id", getProductByIdController);
 router.post("/", createProductController);
 router.put("/:id", updateProductController);
 router.delete("/:id", deleteProductController);
-router.get("/search", searchProductsController);
-router.get("/categoria/:categoria", searchProductByCategoriaController);
 
 export default router;

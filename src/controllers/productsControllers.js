@@ -73,6 +73,7 @@ export const deleteProductController = async (req, res) => {
 
 export const searchProductsController = async (req, res) => {
   try {
+    console.log(req.query);
     const { q } = req.query;
 
     if (!q) {
@@ -93,10 +94,17 @@ export const searchProductsController = async (req, res) => {
   }
 };
 
-export const searchProductByCategoriaController = async (req, res) => {
+export const searchProductByCategoriaController = async (req, res, next) => {
   try {
-    const { categoria } = req.query;
+    const { categoria } = req.params;
     const data = await getProductsByCategoriaModel(categoria);
+
+    if (!data.length) {
+      return res
+        .status(404)
+        .json({ message: "No se encontraron productos en esa categoría" });
+    }
+
     res.json(data);
   } catch (error) {
     next(error);

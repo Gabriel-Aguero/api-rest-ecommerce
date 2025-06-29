@@ -7,6 +7,8 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  query,
+  where,
 } from "firebase/firestore";
 
 export const getProductsModel = async () => {

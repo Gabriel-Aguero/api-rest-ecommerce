@@ -9,6 +9,13 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send(
+    "Biienvenido a la API de productos.\n" +
+      "Esa API fue creada por Gabriel Aguero. Puedes acceder a los productos en /api/products y a las categorias en /api/categorias"
+  );
+  res.end();
+});
 app.use("/api/products", productsRoutes);
 app.use("/api/categorias", categoriasRoutes);
 

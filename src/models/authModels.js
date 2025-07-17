@@ -95,4 +95,4 @@ export const authModel = {
   },
 };
 
-module.exports = authModel;
+

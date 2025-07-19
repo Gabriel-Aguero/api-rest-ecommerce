@@ -1,28 +1,22 @@
-import admin from "../config/firebaseAdmin.js";
-import { authModel } from "../models/authModels.js";
+import jwt from "jsonwebtoken";
 
-export const loginController = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+const default_user = {
+  id: 1,
+  email: "admin@gmail.com",
+  password: "1234",
+};
 
-    // Validación básica
-    if (!email || !password) {
-      throw createError(400, "Email y password son requeridos");
-    }
+export const loginController = (req, res) => {
+  const { email, password } = req.body;
 
-    // Iniciar sesión con Firebase Auth
-    const userRecord = await authModel.getUserByEmail(email);
+  const user = { id: 1 };
 
-    // Firebase Admin no expone directamente la contraseña, necesitamos el SDK cliente para esto
-    // Esta parte requiere el SDK de cliente Firebase para web
-    // Alternativa: Crear token personalizado
-
-    // Crear un token personalizado (JWT)
-    const token = await authModel.generateCustomToken(userRecord.uid);
-
-    res.send({ token });
-  } catch (error) {
-    console.error("Error en login:", error);
-    res.status(401).send({ error: "Autenticación fallida" });
+  if (email == default_user.email && password == default_user.password) {
+    const payload = { user };
+    const expiration = { expiresIn: "1h" };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, expiration);
+    return res.json({ token });
+  } else {
+    return res.sendStatus(401);
   }
 };

@@ -4,67 +4,63 @@ import {
   createProductModel,
   updateProductModel,
   deleteProductModel,
-  searchProductsModel,
-  getProductsByCategoriaModel,
 } from "../models/productsModels.js";
 
 export const getProductsController = async (req, res) => {
-  const data = await getProductsModel();
-  res.json(data);
+  const products = await getProductsModel();
+  res.json(products);
 };
 
 export const getProductByIdController = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const data = await getProductByIdModel(id);
+    const products = await getProductByIdModel(id);
 
-    if (!data) {
+    if (!products) {
       const error = new Error("Producto no encontrado...");
       error.status = 404;
       throw error;
     }
-    res.json(data);
+    res.json(products);
   } catch (error) {
     next(error);
   }
 };
 
 export const createProductController = async (req, res) => {
-  const data = await createProductModel(req.body);
-  res.status(201).json(data);
+  const { name, price, categories } = req.body;
+
+  const products = await createProductModel({ name, price, categories });
+  res.status(201).json(products);
 };
 
 export const updateProductController = async (req, res) => {
-  try {
-    const { id } = req.params;
+  const productId = req.params.id;
+  const { name, price, categories } = req.body;
 
-    const existing = await getProductByIdModel(id);
+  const products = await updateProductModel(productId, {
+    name,
+    price,
+    categories,
+  });
 
-    if (!existing) {
-      const error = new Error("Producto no encontrado para actualizar...");
-      error.status = 404;
-      throw error;
-    }
-
-    const data = await updateProductModel(id, req.body);
-    res.json(data);
-  } catch (error) {
-    next(error);
+  if (!products) {
+    return res.status(404).json({ message: "Producto no encontrado..." });
   }
+  res.json(products);
 };
 
 export const deleteProductController = async (req, res) => {
+  const productId = req.params.id;
+
   try {
     const { id } = req.params;
-    const existing = await getProductByIdModel(id);
+    const products = await deleteProductModel(id);
 
-    if (!existing) {
-      const error = new Error("Producto no encontrado para eliminar...");
-      error.status = 404;
-      throw error;
+    if (!products) {
+      return res.status(404).json({ message: "Producto no encontrado..." });
     }
 
-    await deleteProductModel(id);
     res.status(204).send();
   } catch (error) {
     next(error);
@@ -72,40 +68,16 @@ export const deleteProductController = async (req, res) => {
 };
 
 export const searchProductsController = async (req, res) => {
+  const { name } = req.query;
+
   try {
-    console.log(req.query);
-    const { q } = req.query;
+    const products = await getProductsModel();
 
-    if (!q) {
-      return res
-        .status(400)
-        .json({ message: "Falta el parámetro de búsqueda (?q=)" });
-    }
+    const filteredProducts = products.filter((product) =>
+      product.name.toLowerCase().includes(name.toLowerCase())
+    );
 
-    const data = await searchProductsModel(q);
-
-    if (data.length === 0) {
-      return res.status(404).json({ message: "No se encontraron productos" });
-    }
-
-    res.json(data);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const searchProductByCategoriaController = async (req, res, next) => {
-  try {
-    const { categoria } = req.params;
-    const data = await getProductsByCategoriaModel(categoria);
-
-    if (!data.length) {
-      return res
-        .status(404)
-        .json({ message: "No se encontraron productos en esa categoría" });
-    }
-
-    res.json(data);
+    res.json(filteredProducts);
   } catch (error) {
     next(error);
   }

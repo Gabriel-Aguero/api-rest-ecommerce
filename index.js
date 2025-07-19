@@ -38,8 +38,8 @@ app.get("/", (req, res) => {
   `);
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/products", productsRoutes);
+app.use("/api", productsRoutes);
+app.use(authRoutes);
 
 // Manejo de rutas no definidas (404)
 app.use((req, res, next) => {

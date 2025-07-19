@@ -6,17 +6,16 @@ import {
   updateProductController,
   deleteProductController,
   searchProductsController,
-  searchProductByCategoriaController,
 } from "../controllers/productsControllers.js";
+import { auth } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.get("/search", searchProductsController);
-router.get("/categoria/:categoria", searchProductByCategoriaController);
-router.get("/", getProductsController);
-router.get("/:id", getProductByIdController);
-router.post("/", createProductController);
-router.put("/:id", updateProductController);
-router.delete("/:id", deleteProductController);
+router.get("/products", getProductsController);
+router.get("/products/search", searchProductsController);
+router.get("/products/:id", getProductByIdController);
+router.post("/products", auth, createProductController);
+router.put("products/:id", updateProductController);
+router.delete("products/:id", deleteProductController);
 
 export default router;

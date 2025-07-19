@@ -6,59 +6,44 @@ import {
   addDoc,
   deleteDoc,
   doc,
-  updateDoc,
-  query,
-  where,
+  setDoc,
 } from "firebase/firestore";
 
+const productsCollection = collection(db, "products");
 export const getProductsModel = async () => {
-  const productsCollection = collection(db, "products");
   const snapshot = await getDocs(productsCollection);
   const products = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   return products;
 };
 
 export const getProductByIdModel = async (id) => {
-  const productDoc = doc(db, "products", id);
-  const snapshot = await getDoc(productDoc);
-
-  if (!snapshot.exists()) return null;
-
-  return { id: snapshot.id, ...snapshot.data() };
+  const productRef = doc(productsCollection, id);
+  const snapshot = await getDoc(productRef);
+  return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null;
 };
 
 export const createProductModel = async (product) => {
-  const productsCollection = collection(db, "products");
   const docRef = await addDoc(productsCollection, product);
-  return docRef.id;
+  return { id: docRef.id, ...product };
 };
 
 export const updateProductModel = async (id, product) => {
-  const productDoc = doc(db, "products", id);
-  await updateDoc(productDoc, product);
-  return getProductByIdModel(id);
+  const productRef = doc(productsCollection, id);
+  const snapshot = await getDoc(productRef);
+  if (!snapshot.exists()) {
+    return null;
+  }
+  await setDoc(productRef, { ...product });
+  return { id, ...product };
 };
 
 export const deleteProductModel = async (id) => {
-  const productDoc = doc(db, "products", id);
-  await deleteDoc(productDoc);
-  return { id };
-};
+  const productRef = doc(productsCollection, id);
+  const snapshot = await getDoc(productRef);
+  if (!snapshot.exists()) {
+    return null;
+  }
 
-export const getProductsByCategoriaModel = async (categoria) => {
-  const q = query(
-    collection(db, "products"),
-    where("category", "==", categoria)
-  );
-  const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-};
-
-export const searchProductsModel = async (query) => {
-  const productsCollection = collection(db, "products");
-  const snapshot = await getDocs(productsCollection);
-  const products = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  return products.filter((product) =>
-    product.title.toLowerCase().includes(query.toLowerCase())
-  );
+  await deleteDoc(productRef);
+  return true;
 };

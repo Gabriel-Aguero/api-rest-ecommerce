@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
     <ul>
       <li> ✔️ GET /api/products → Listar todos los productos</li>
       <li> ✔️ GET /api/products/:id → Obtener un producto por ID</li>
-      <li> ✔️ GET /api/products/name=palabra → Buscar productos por nombre</li>
+      <li> ✔️ GET /api/products/search?name=palabra → Buscar productos por nombre</li>
       <li> ✔️ POST /api/products → Crear un producto</li>
       <li> ✔️ PUT /api/products/:id → Actualizar un producto</li>
       <li> ✔️ DELETE /api/products/:id → Eliminar un producto</li>

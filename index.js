@@ -11,27 +11,30 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send(`
-    🖐️​ 🛒 <strong>Supermercado API</strong><br><br>
+    🖐️​ <strong>Bienvenido</strong><br><br>
+    👨‍💻​ <strong>Soy Gabriel Agüero</strong><br><br>
+    
+    🎓​ Este proyecto fue creado en contexto del Curso de Node JS. 🎓​<br><br>
+    ⭐​ Esta api te permite gestionar productos de una tienda.<br><br>
 
-    👋 Bienvenido a mi API REST para gestionar productos de supermercado.<br><br>
+    🥇 ​La puedes encontrar en mi repositorio de GitHub. 
+    👉 <a href="https://github.com/Gabriel-Aguero">https://github.com/Gabriel-Aguero</a><br><br>
 
-    👨‍💻​ <strong>Autor:</strong> Gabriel Agüero<br><br>
 
     📚 <strong>Tecnologías utilizadas:</strong><br>
     - Node.js<br>
     - Express.js<br>
     - Firebase Firestore<br>
-    - CORS<br><br>
+    - ES6 Modules<br> 
 
     📌 <strong>Endpoints disponibles:</strong><br>
     <ul>
-      <li>GET /api/products → Listar todos los productos</li>
-      <li>GET /api/products/:id → Obtener un producto por ID</li>
-      <li>GET /api/products/search?q=... → Buscar productos por nombre</li>
-      <li>GET /api/products/categoria/:categoria → Lista todos los productos de una categoría</li>
-      <li>POST /api/products → Crear un producto</li>
-      <li>PUT /api/products/:id → Actualizar un producto</li>
-      <li>DELETE /api/products/:id → Eliminar un producto</li>
+      <li> ✔️ GET /api/products → Listar todos los productos</li>
+      <li> ✔️ GET /api/products/:id → Obtener un producto por ID</li>
+      <li> ✔️ GET /api/products/name=palabra → Buscar productos por nombre</li>
+      <li> ✔️ POST /api/products → Crear un producto</li>
+      <li> ✔️ PUT /api/products/:id → Actualizar un producto</li>
+      <li> ✔️ DELETE /api/products/:id → Eliminar un producto</li>
     </ul>
 
     🧪 Ideal para usar desde Postman o conectarse a un frontend.
